@@ -30,6 +30,7 @@ class Solution:
 def main():
     values = [8, 17, 21, 18, None, None, 6]
     root = TreeNode.from_list(values)
+    TreeNode.print_tree(root)
     sln = Solution()
     res = sln.decorateRecord(root)
     print(res)
