@@ -8,17 +8,24 @@ class TreeNode:
         self.right = right
 
     @classmethod
-    def from_list(cls, values):
+    def from_list(cls, values, with_nodes=False):
         """Construct a binary tree from its level-order traversal.
 
         ``values`` follows LeetCode's convention where ``None`` denotes an
         absent node. For example, ``[1, None, 3, 4]`` produces a root ``1``
         with an empty left child, a right child ``3``, and ``3`` itself has a
         left child ``4``.
+
+        By default returns only the ``root``. When ``with_nodes`` is true,
+        returns a tuple ``(root, nodes)`` where ``nodes`` is positionally
+        aligned with ``values``: ``nodes[i]`` is the ``TreeNode`` created for
+        ``values[i]`` (or ``None`` when ``values[i]`` is ``None``).
         """
+        nodes = [None] * len(values)
         if not values or values[0] is None:
-            return None
+            return (None, nodes) if with_nodes else None
         root = cls(values[0])
+        nodes[0] = root
         queue = deque([root])
         index = 1
         length = len(values)
@@ -29,14 +36,16 @@ class TreeNode:
                 index += 1
                 if value is not None:
                     node.left = cls(value)
+                    nodes[index - 1] = node.left
                     queue.append(node.left)
             if index < length:
                 value = values[index]
                 index += 1
                 if value is not None:
                     node.right = cls(value)
+                    nodes[index - 1] = node.right
                     queue.append(node.right)
-        return root
+        return (root, nodes) if with_nodes else root
 
     @staticmethod
     def print_tree(root):
