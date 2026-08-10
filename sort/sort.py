@@ -94,9 +94,9 @@ def partition(nums, left, right):
     pivot = nums[left]
     i, j = left, right
     while i < j:
-        while i < j and nums[j] > pivot:
+        while i < j and nums[j] >= pivot:
             j -= 1
-        while i < j and nums[i] < pivot:
+        while i < j and nums[i] <= pivot:
             i += 1
         nums[i], nums[j] = nums[j], nums[i]
 
