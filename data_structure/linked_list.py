@@ -5,20 +5,28 @@ class ListNode:
         self.next = next
 
     @classmethod
-    def from_list(cls, values):
-        """Construct a linked list from ``values`` and return its head node."""
+    def from_list(cls, values, with_nodes=False):
+        """Construct a linked list from ``values`` and return its head node.
+
+        By default returns only the ``head``. When ``with_nodes`` is true,
+        returns a tuple ``(head, nodes)`` where ``nodes`` is positionally
+        aligned with ``values``: ``nodes[i]`` is the ``ListNode`` created for
+        ``values[i]``.
+        """
         head = None
         tail = None
+        nodes = [None] * len(values)
 
-        for value in values:
+        for index, value in enumerate(values):
             node = cls(value)
+            nodes[index] = node
             if head is None:
                 head = node
             else:
                 tail.next = node
             tail = node
 
-        return head
+        return (head, nodes) if with_nodes else head
 
     @staticmethod
     def print_list(head):
