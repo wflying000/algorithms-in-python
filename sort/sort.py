@@ -104,6 +104,57 @@ def partition(nums, left, right):
 
     return i
 
+def quick_sort_3way(nums):
+    quick_sort_3way_core(nums, 0, len(nums) - 1)
+
+
+def quick_sort_3way_core(nums, left, right):
+    if left >= right:
+        return 
+    low, high = partition_3way(nums, left, right)
+    quick_sort_3way_core(nums, left, low - 1)
+    quick_sort_3way_core(nums, high + 1, right)
+
+def partition_3way(nums, left, right):
+    pivot = nums[left]
+    low, mid, high = left, left, right
+    while mid <= high:
+        if nums[mid] < pivot:
+            nums[low], nums[mid] = nums[mid], nums[low]
+            low += 1
+            mid += 1
+        elif nums[mid] > pivot:
+            nums[mid], nums[high] = nums[high], nums[mid]
+            high -= 1
+        else:
+            mid += 1
+
+    return low, high 
+        
+def max_heapify(nums, i, n):
+    j = 2 * i + 1
+    while j < n:
+        if j + 1 < n and nums[j + 1] > nums[j]:
+            j += 1
+        if nums[i] >= nums[j]:
+            return 
+        nums[i], nums[j] = nums[j], nums[i]
+        i = j
+        j = 2 * i + 1
+
+def build_max_heap(nums):
+    n = len(nums)
+    for i in range(n // 2 - 1, -1, -1):
+        max_heapify(nums, i, n)
+
+def heap_sort(nums):
+    n = len(nums)
+    build_max_heap(nums)
+    for end in range(n - 1, 0, -1):
+        nums[0], nums[end] = nums[end], nums[0]
+        max_heapify(nums, 0, end)
+
+
 
 def test_selection_sort():
     nums = [random.randint(0, 100) for _ in range(10)]
@@ -144,12 +195,33 @@ def test_quick_sort():
     print(f"after sorted, nums: {nums}")
     assert nums == nums_sorted
 
+def test_quick_sort_3way():
+    nums = [random.randint(0, 100) for _ in range(10)]
+    nums_sorted = sorted(nums)
+    print(f"before sorted, nums: {nums}")
+    quick_sort_3way(nums)
+    print(f"after sorted, nums: {nums}")
+    assert nums == nums_sorted
+    
+
+def test_heap_sort():
+    nums = [random.randint(0, 100) for _ in range(10)]
+    nums_sorted = sorted(nums)
+    print(f"before sorted, nums: {nums}")
+    heap_sort(nums)
+    print(f"after sorted, nums: {nums}")
+    assert nums == nums_sorted
+        
+
+
 def main():
     # test_selection_sort()
     # test_insertion_sort()
     # test_bubble_sort()
     # test_merge_sort()
-    test_quick_sort()
+    # test_quick_sort()
+    # test_quick_sort_3way()
+    test_heap_sort()
 
 if __name__ == "__main__":
     main()
